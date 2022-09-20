@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PersonnageController {
 
+
     @GetMapping("/Personnages")
     public String listePersonnages(){
         return "test : liste personnages";
@@ -16,8 +17,8 @@ public class PersonnageController {
 
 
     @GetMapping(value = "/Personnages/{id}", produces = "application/json")
-    public Personage afficherUnProduit(@PathVariable int id) {
-        Personage personage = new Personage(id,"martin", "magicien", 100);
-        return personage;
+    public Personage afficherUnPersonnage(@PathVariable int id) {
+        Personage personnage = new Personage(id,"martin", "magicien", 100);
+        return personnage;
     }
 }
