@@ -17,13 +17,23 @@
     </tr>
     </thead>
     <tbody>
+
         <tr th:each="hero: ${personnageListe}">
-            <th scope="row" th:text="${hero.id}"></th>
-            <td  th:text="${hero.name}"></td>
-            <td  th:text="${hero.classe}"></td>
-            <td  th:text="${hero.life}"></td>
+            <th scope="row" th:text="${personnageListe.indexOf(hero)}"></th>
+            <td  th:text="${hero.getName()}"></td>
+            <td  th:text="${hero.getClasse()}"></td>
+            <td  th:text="${hero.getLife()}"></td>
             <td><a th:href="@{'/personnage/' + ${personnageListe.indexOf(hero)}}">Voir</a></td>
+            <td>
+                <form  th:action="@{'/personnage/' + ${personnageListe.indexOf(hero)}}" th:method="delete">
+                    <input type="submit" value="delete">
+                </form>
+            </td>
+            <td>
+                <a th:href="@{'/update/' + ${personnageListe.indexOf(hero)}}"><button >update</button></a>
+            </td>
         </tr>
+
     </tbody>
 
     <nav>

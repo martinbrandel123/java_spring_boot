@@ -18,7 +18,7 @@ public class PersonnageController {
     }
 
     @GetMapping("/create")
-    public String showForm(Model model){
+    public String showCreateForm(Model model){
         Personnage personnage = new Personnage();
         model.addAttribute("personnage", personnage);
         return "formulaire";
@@ -26,27 +26,40 @@ public class PersonnageController {
 
     @PostMapping("/create")
     public String submitForm(@ModelAttribute("personnage") Personnage personnage, Model model){
-        int id =  personnage.getId();
-        String name =  personnage.getName();
-        String classe =  personnage.getClasse();
-        int life =  personnage.getLife();
-        String image = personnage.getImage();
-
-        personnages.add(new Personnage(id, name, classe, life));
+        personnages.add(personnage);
         model.addAttribute("personnageListe", personnages);
-        return "personnageListe";
+        return "formulaire";
+    }
+    @GetMapping("/update/{id}")
+    public String showupdateForm(Model model, @PathVariable("id") int id){
+        model.addAttribute("personnage", personnages.get(id));
+        return "updatePersonnage";
     }
 
-    @GetMapping("/personnage")
+    @PutMapping("/update")
+    public String updateForm(@ModelAttribute("personnage") Personnage personnage) {
+        personnages.get(personnage.getId()).setName(personnage.getName());
+        personnages.get(personnage.getId()).setClasse(personnage.getClasse());
+        personnages.get(personnage.getId()).setLife(personnage.getLife());
+        return "redirect:/listeDePersonnage";
+    }
+
+
+
+    @GetMapping("/listeDePersonnage")
     public String getPeople(Model model) {
-        model.addAttribute("nom", "voici un nom");
         model.addAttribute("personnageListe", personnages);
         return "personnageListe";
     }
 
     @GetMapping("/personnage/{id}")
-    public String getPeople(@PathVariable("id") int id, Model model) {
+    public String getPersonnage(@PathVariable("id") int id, Model model) {
         model.addAttribute("personnage", personnages.get(id));
         return "personnage";
+    }
+    @DeleteMapping("/personnage/{id}")
+    public String deletePersonnage(@PathVariable("id") int id) {
+        personnages.remove(id);
+        return "redirect:/listeDePersonnage";
     }
 }
