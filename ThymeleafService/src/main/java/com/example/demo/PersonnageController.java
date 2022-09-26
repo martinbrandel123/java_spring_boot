@@ -3,19 +3,43 @@ package com.example.demo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
 public class PersonnageController {
 
     private static List<Personnage> personnages = new ArrayList<Personnage>();
+    private static String API_URL = "http://localhost:8081/personnageslist/";
+    RestTemplate restTemplate = new RestTemplate();
 
     @GetMapping("/")
     public String listePersonnage(){
         return "index";
     }
+
+    @GetMapping("/listeDePersonnage")
+    public String getPeople(Model model) {
+        List<Personnage> result = Arrays.asList(this.restTemplate.getForObject(API_URL, Personnage[].class));
+        model.addAttribute("personnageListe", result);
+        return "personnageListe";
+    }
+
+    @GetMapping("/personnage/{id}")
+    public String getPersonnage(@PathVariable("id") int id, Model model) {
+        Personnage result = this.restTemplate.getForObject( API_URL + id, Personnage.class);
+        model.addAttribute("personnage", result);
+        return "personnage";
+    }
+    @DeleteMapping("/personnage/{id}")
+    public String deletePersonnage(@PathVariable("id") int id) {
+        this.restTemplate.delete(API_URL + id);
+        return "redirect:/listeDePersonnage";
+    }
+
 
     @GetMapping("/create")
     public String showCreateForm(Model model){
@@ -25,41 +49,28 @@ public class PersonnageController {
     }
 
     @PostMapping("/create")
-    public String submitForm(@ModelAttribute("personnage") Personnage personnage, Model model){
-        personnages.add(personnage);
-        model.addAttribute("personnageListe", personnages);
+    public String submitForm(@ModelAttribute("personnage") Personnage personnage){
+        this.restTemplate.postForLocation(API_URL, personnage);
         return "formulaire";
     }
     @GetMapping("/update/{id}")
     public String showupdateForm(Model model, @PathVariable("id") int id){
-        model.addAttribute("personnage", personnages.get(id));
+        Personnage personnage = this.restTemplate.getForObject( API_URL + id, Personnage.class);
+        model.addAttribute("personnage", personnage);
         return "updatePersonnage";
     }
 
     @PutMapping("/update")
     public String updateForm(@ModelAttribute("personnage") Personnage personnage) {
-        personnages.get(personnage.getId()).setName(personnage.getName());
-        personnages.get(personnage.getId()).setClasse(personnage.getClasse());
-        personnages.get(personnage.getId()).setLife(personnage.getLife());
+        this.restTemplate.put(API_URL, personnage);
         return "redirect:/listeDePersonnage";
     }
 
 
+    @GetMapping("/test")
+    public String test(Model model) {
 
-    @GetMapping("/listeDePersonnage")
-    public String getPeople(Model model) {
-        model.addAttribute("personnageListe", personnages);
-        return "personnageListe";
+        return "test";
     }
 
-    @GetMapping("/personnage/{id}")
-    public String getPersonnage(@PathVariable("id") int id, Model model) {
-        model.addAttribute("personnage", personnages.get(id));
-        return "personnage";
-    }
-    @DeleteMapping("/personnage/{id}")
-    public String deletePersonnage(@PathVariable("id") int id) {
-        personnages.remove(id);
-        return "redirect:/listeDePersonnage";
-    }
 }

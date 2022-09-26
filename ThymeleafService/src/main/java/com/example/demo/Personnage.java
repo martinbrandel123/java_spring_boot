@@ -2,10 +2,6 @@ package com.example.demo;
 
 public class Personnage {
 
-
-
-
-
     private int id;
     private String name;
     private String classe;
@@ -59,16 +55,6 @@ public class Personnage {
         this.life = life;
     }
     public void setImage(String image) {this.image = image;}
-
-    @Override
-    public String toString() {
-        return "Personnage{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", classe='" + classe + '\'' +
-                ", life=" + life +
-                '}';
-    }
 
 
 }

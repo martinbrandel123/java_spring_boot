@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div th:text="${personnageListe}"></div>
+  <tr th:each="hero: ${personnageListe}">
+    <div th:text="${hero}"></div>
+  </tr>
+</body>
+</html>
