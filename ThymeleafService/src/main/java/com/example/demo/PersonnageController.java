@@ -51,6 +51,7 @@ public class PersonnageController {
     @PostMapping("/create")
     public String submitForm(@ModelAttribute("personnage") Personnage personnage){
         this.restTemplate.postForLocation(API_URL, personnage);
+
         return "formulaire";
     }
     @GetMapping("/update/{id}")

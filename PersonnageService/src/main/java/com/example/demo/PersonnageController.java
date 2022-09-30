@@ -21,7 +21,7 @@ public class PersonnageController {
 
     @ApiOperation(value = "Récupère une liste de personnages")
     /* permet de donner des valeur à cette methode dans swagger*/
-   @GetMapping("/personnageslist")
+    @GetMapping("/personnageslist")
     /* permet de notifier le type de requette HTTP et la valeur de cette requette*/
     public List<Personnage> listePersonnages(){
         return this.personnageRepository.findAll();
